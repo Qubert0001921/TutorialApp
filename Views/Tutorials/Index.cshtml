@@ -1,0 +1,54 @@
+﻿@using EmptyTest.Models.Responses
+@{
+    ViewData["Title"] = "My Tutorials";
+}
+@model IEnumerable<TutorialResponse>
+
+<div class="row mt-3">
+    <div class="col-5">
+        <div class="breadcrumb">
+            <label class="breadcrumb-item">My Tutorials</label>
+        </div>
+    </div>
+
+    <div class="col-7">
+        <h4>Tutorials management</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <a asp-controller="Tutorials" asp-action="CreateTutorial">Create Tutorial</a>
+    </div>
+</div>
+
+<table class="table table-sm table-hover table-responsive tutorials-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Access</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var tutorial in Model)
+        {
+            <tr onclick="redirectToPage('Tutorials/@tutorial.Id')">
+                <td>@tutorial.Name</td>
+                <td>@tutorial.Description</td>
+                <td>@tutorial.Price</td>
+                <td>
+                    @if(tutorial.IsPublic)
+                    {
+                        <label>Public</label>
+                    }
+                    else 
+                    {
+                        <label>Private</label>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

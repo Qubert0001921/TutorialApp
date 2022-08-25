@@ -1,0 +1,46 @@
+﻿.menu-option {
+    display: inline-block;
+    margin: 5px;
+}
+
+.menu-optionsgroup-left {
+    text-align: left;
+    float:left;
+}
+
+.menu-optionsgroup-right {
+    text-align: right;
+    float:right;
+}
+
+a.button-link {
+    border: 1px solid black;
+    padding: 2px;
+    text-decoration: none;
+    color: black !important;
+}
+
+.tutorial {
+}
+
+.desc-area {
+    resize: none;
+}
+
+.tutorials-table tr:hover {
+    cursor:pointer;
+}
+
+.card-home:hover {
+    cursor: pointer;
+    opacity: 0.9;
+}
+.section {
+    border: 1px solid lightgray;
+    border-radius: 3px;
+}
+
+.section:hover {
+    cursor: pointer;
+    border: 1px solid lightblue;
+}

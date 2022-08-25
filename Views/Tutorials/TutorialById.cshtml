@@ -1,0 +1,81 @@
+﻿@using EmptyTest.ViewModels
+@{
+    ViewData["Title"] = "Tutotrial";
+}
+@model TutorialByIdViewModel
+
+<div class="row mt-3">
+    <div class="col-12 col-md-6 col-lg-4 mt-3">
+        <div class="card">
+            <img class="card-img-top img-fluid" src="@Model.Tutorial.ImagePath" />
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-3">
+                        <h3>@Model.Tutorial.Price zł</h3>
+                    </div>
+                    <div class="col-9">
+                        <button class="btn btn-primary w-100">Buy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-8 mt-3">
+        <h1>@Model.Tutorial.Name</h1>
+        <p>@Model.Tutorial.Description</p>
+        <p>Created by <a href="#">@Model.Tutorial.AccountEmail</a></p>
+
+        @if (ViewData["IsAuthor"] is true)
+        {
+                <a href="/Tutorials/@Model.Tutorial.Id/Section">add section</a>
+        }
+
+        <div class="container-fluid px-0">
+            @if(Model.Sections.Any()) 
+            {
+                <div class="sections">
+                    @foreach (var sec in Model.Sections)
+                    {
+                        <div class="section p-1 mt-1">
+                            <div class="row">
+                                <div class="col-10">
+                                    <h4>@sec.Name</h4>
+                                </div>
+                                <div class="col-2" style="text-align: right;">
+                                    <label class="btn-section-expand">Expand</label>
+                                </div>
+                            </div>
+                            <div class="topics" style="display: none;">
+                                <label>@sec.ShortDescription</label>
+                                <hr />
+                                @if (ViewData["IsAuthor"] is true)
+                                {
+                                    <a href="/Tutorials/@Model.Tutorial.Id/Section/@sec.Id/Topics">Add topic</a>
+                                }
+                                @if(sec.Topics.Any())
+                                {
+                                        <ul>
+                                            @foreach (var topic in sec.Topics)
+                                            {
+                                                <li>@topic.Title</li>   
+                                            }
+                                        </ul>
+                                }
+                                else 
+                                {
+                                    <div class="text-center">
+                                        No Topics
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else 
+            {
+                <p class="text-center">No Sections</p>
+            }
+        </div>
+    </div>
+</div>

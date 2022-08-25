@@ -1,0 +1,99 @@
+﻿@using EmptyTest.Models.Requests.MyTutorials
+@{
+    ViewData["Title"] = "Create tutorial";
+}
+@model CreateTutorialRequest
+
+<div class="row mt-3">
+    <div class="col-5">
+        <div class="breadcrumb">
+            <a class="breadcrumb-item" asp-controller="Tutorials" asp-action="Index">My Tutorials</a>
+            <label class="breadcrumb-item">Create Tutorial</label>
+        </div>
+    </div>
+
+    <div class="col-7">
+        <h4>Create Tutorial</h4>
+    </div>
+</div>
+
+<div class="mx-auto">
+    <form asp-action="CreateTutorial" asp-controller="Tutorials" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="form-group mt-3">
+                    <div class="row">
+                        <div class="col-2">
+                            <label class="form-label" asp-for="Name">Name: </label>
+                        </div>
+                        <div class="col-10">
+                            <input type="text" class="form-control" asp-for="Name" />
+                        </div>
+                        <span class="text-danger text-center mt-2" asp-validation-for="Name"></span>
+                        @if(ViewData["NameError"] is not null) 
+                        {
+                            <span class="text-danger text-center mt-2">@ViewData["NameError"]</span>
+                        }
+                    </div>
+                </div>
+                <div class="form-group mt-3">
+                    <div class="row">
+                        <div class="col-2">
+                            <label class="form-label" asp-for="Description">Description: </label>
+                        </div>
+                        <div class="col-10">
+                            <textarea class="form-control desc-area" rows="4" asp-for="Description" ></textarea>
+                        </div>
+                        <span class="text-danger text-center mt-2" asp-validation-for="Description"></span>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-group mt-3">
+                    <div class="row">
+                        <div class="col-2">
+                            <label class="form-label" asp-for="IsPublic">Access: </label>
+                        </div>
+                        <div class="col-10">
+                            <select asp-for="IsPublic" class="form-control">
+                                <option value="false" selected>Private</option>
+                                <option value="true">Public</option>
+                            </select>
+                        </div>
+                        <span class="text-danger text-center mt-2" asp-validation-for="IsPublic"></span>
+                    </div>
+                </div>
+                <div class="form-group mt-3">
+                    <div class="row">
+                        <div class="col-2">
+                            <label class="form-label" asp-for="Price">Price: </label>
+                        </div>
+                        <div class="col-10">
+                            <input type="number" step="0.01" class="form-control" asp-for="Price" />
+                        </div>
+                        <span class="text-danger text-center mt-2" asp-validation-for="Price"></span>
+                    </div>
+                </div>
+                <div class="form-group mt-3">
+                    <div class="row">
+                        <div class="col-2">
+                            <label class="form-label" asp-for="ImageFile">Image: </label>
+                        </div>
+                        <div class="col-10">
+                            <input class="form-control" type="file" asp-for="ImageFile" accept=".png,.jpg,.jpeg"/>
+                        </div>
+                        <span class="text-danger text-center mt-2" asp-validation-for="ImageFile"></span>
+                    </div>
+                </div>
+                <div class="form-group mt-3">
+                    <div class="row" style="text-align: right;">
+                        <div class="col-12">
+                            <button style="width: 20%;" type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
