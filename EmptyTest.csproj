@@ -8,16 +8,62 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="jQuery" Version="3.6.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.6" />
+    <PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />
+    <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.2" />
+    <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="5.0.1" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
+    <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="8.4.1" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="5.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\usrdata\timgs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\lib\btstrap\css\bootstrap-grid.css.map" />
+    <None Include="wwwroot\lib\btstrap\css\bootstrap-grid.min.css.map" />
+    <None Include="wwwroot\lib\btstrap\css\bootstrap-grid.rtl.css.map" />
+    <None Include="wwwroot\lib\btstrap\css\bootstrap-grid.rtl.min.css.map" />
+    <None Include="wwwroot\lib\btstrap\css\bootstrap-reboot.css.map" />
+    <None Include="wwwroot\lib\btstrap\css\bootstrap-reboot.min.css.map" />
+    <None Include="wwwroot\lib\btstrap\css\bootstrap-reboot.rtl.css.map" />
+    <None Include="wwwroot\lib\btstrap\css\bootstrap-reboot.rtl.min.css.map" />
+    <None Include="wwwroot\lib\btstrap\css\bootstrap-utilities.css.map" />
+    <None Include="wwwroot\lib\btstrap\css\bootstrap-utilities.min.css.map" />
+    <None Include="wwwroot\lib\btstrap\css\bootstrap-utilities.rtl.css.map" />
+    <None Include="wwwroot\lib\btstrap\css\bootstrap-utilities.rtl.min.css.map" />
+    <None Include="wwwroot\lib\btstrap\css\bootstrap.css.map" />
+    <None Include="wwwroot\lib\btstrap\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\lib\btstrap\css\bootstrap.rtl.css.map" />
+    <None Include="wwwroot\lib\btstrap\css\bootstrap.rtl.min.css.map" />
+    <None Include="wwwroot\lib\btstrap\js\bootstrap.bundle.js" />
+    <None Include="wwwroot\lib\btstrap\js\bootstrap.bundle.js.map" />
+    <None Include="wwwroot\lib\btstrap\js\bootstrap.bundle.min.js" />
+    <None Include="wwwroot\lib\btstrap\js\bootstrap.bundle.min.js.map" />
+    <None Include="wwwroot\lib\btstrap\js\bootstrap.esm.js" />
+    <None Include="wwwroot\lib\btstrap\js\bootstrap.esm.js.map" />
+    <None Include="wwwroot\lib\btstrap\js\bootstrap.esm.min.js" />
+    <None Include="wwwroot\lib\btstrap\js\bootstrap.esm.min.js.map" />
+    <None Include="wwwroot\lib\btstrap\js\bootstrap.js" />
+    <None Include="wwwroot\lib\btstrap\js\bootstrap.js.map" />
+    <None Include="wwwroot\lib\btstrap\js\bootstrap.min.js" />
+    <None Include="wwwroot\lib\btstrap\js\bootstrap.min.js.map" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

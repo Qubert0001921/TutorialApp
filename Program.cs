@@ -5,6 +5,7 @@ using EmptyTest.Repositories;
 using EmptyTest.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace EmptyTest;
 
@@ -13,6 +14,28 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        builder.Host.UseSerilog((context, services, opts) =>
+        {
+            opts.Enrich.WithMachineName();
+            opts.Enrich.WithProcessName();
+            opts.Enrich.WithProcessId();
+            opts.Enrich.FromLogContext();
+            opts.Enrich.With(services.GetService<AppNameEnricher>());
+
+            opts.WriteTo.Console();
+            opts.WriteTo.Seq("http://localhost:8081");
+            //opts.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(context.Configuration["ElasticSearch:Uri"]))
+            //{
+            //    AutoRegisterTemplate = true,
+            //    IndexFormat = $"{context.Configuration["AppName"]}-log-{DateTime.UtcNow.ToString("yyyy-MM-hh")}",
+            //    NumberOfShards = 2,
+            //    NumberOfReplicas = 2
+            //});
+            //opts.WriteTo.Seq(context.Configuration["Seq:Url"]);
+        });
+
+        builder.Services.AddTransient<AppNameEnricher>();
         builder.Services.AddControllersWithViews();
         builder.Services.AddAuthentication("Cookie").AddCookie("Cookie", cfg =>
         {
@@ -23,6 +46,8 @@ public class Program
             cfg.ExpireTimeSpan = TimeSpan.FromDays(authenticationSettings.ExpireDays);
             cfg.LoginPath = "/Auth/SignIn";
             cfg.LogoutPath = "/Auth/Logout";
+            cfg.Cookie.HttpOnly = true;
+            cfg.ReturnUrlParameter = "RedirectUrl";
         });
         builder.Services.AddAuthorization();
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -39,24 +64,39 @@ public class Program
         builder.Services.AddScoped<IUserContextService, UserContextService>();
         builder.Services.AddScoped<ISectionRepository, SectionRepository>();
         builder.Services.AddScoped<ISectionService, SectionService>();
+        builder.Services.AddScoped<ITopicRepository, TopicRepository>();
+        builder.Services.AddScoped<ITopicService, TopicService>();
 
-        var app = builder.Build();
-
-        app.UseStaticFiles();
-
-        app.UseRouting();
-
-        app.UseAuthentication();
-
-        app.UseAuthorization();
-
-        app.UseEndpoints(endpoints =>
+        try
         {
-            endpoints.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-        });
+            var app = builder.Build();
 
-        app.Run();
+            app.UseStaticFiles();
+
+            app.UseSerilogRequestLogging();
+
+            app.UseRouting();
+
+            app.UseAuthentication();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            app.Run();
+        }
+        catch (Exception ex)
+        {
+            Log.Fatal("Application caught an exception: {ex}", ex);
+        }
+        finally
+        {
+            Log.Information("Application stopped");
+        }
     }
 }
