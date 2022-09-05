@@ -25,11 +25,10 @@ public class TopicsController : Controller
             return BadRequest(ModelState);
         }
 
-        Guid topicId;
-
         try
         {
-            topicId = await _topicService.CreateTopic(modelRequest, sectionId);
+            var topic = await _topicService.CreateTopic(modelRequest, sectionId);
+            return Created(topic.Id.ToString(), topic);
         }
         catch (BadRequestException exception)
         {
@@ -37,7 +36,6 @@ public class TopicsController : Controller
             return BadRequest(ModelState);
         }
 
-        return Created(topicId.ToString(), null);
     }
 
     [HttpGet]

@@ -2,12 +2,13 @@
 using EmptyTest.Entities;
 using EmptyTest.Exceptions;
 using EmptyTest.Models.Requests.MyTutorials;
+using EmptyTest.Models.Responses;
 using EmptyTest.Repositories;
 
 namespace EmptyTest.Services;
 public interface ITopicService
 {
-    Task<Guid> CreateTopic(AddTopicRequest modelRequest, Guid sectionId);
+    Task<TopicResponse> CreateTopic(AddTopicRequest modelRequest, Guid sectionId);
 }
 
 public class TopicService : ITopicService
@@ -23,7 +24,7 @@ public class TopicService : ITopicService
         _sectionRepository = sectionRepository;
     }
 
-    public async Task<Guid> CreateTopic(AddTopicRequest modelRequest, Guid sectionId)
+    public async Task<TopicResponse> CreateTopic(AddTopicRequest modelRequest, Guid sectionId)
     {
         var section = await _sectionRepository.FindByIdAsync(sectionId);
         if (section is null)
@@ -43,6 +44,8 @@ public class TopicService : ITopicService
 
         await _topicRepository.CreateAsync(topic);
 
-        return topic.Id;
+        var model = _mapper.Map<TopicResponse>(topic);
+
+        return model;
     }
 }

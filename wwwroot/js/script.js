@@ -80,7 +80,24 @@ function onAddTopicSuccess(data, textStatus) {
 
     $("#add-topic-modal").modal("hide");
 
-    console.log(addTopicElement.parentElement.querySelector(".topics"));
+    let topics = addTopicElement.parentElement.querySelector(".topics");
+    let noTopics = addTopicElement.parentElement.querySelector(".no-topics");
+    let topicId = data.id;
+    let topicTitle = data.title;
+
+    if (topics.style.display == "none") {
+        noTopics.style.display = "none";
+        topics.style.display = "block";
+    }
+
+    let topic = document.createElement("li");
+    let topicLink = document.createElement("a")
+
+    topicLink.href = `/Tutorials/${addTopicTutorialId}/Section/${addTopicSectionId}/Topics/${topicId}`;
+    topicLink.innerText = topicTitle;
+
+    topic.appendChild(topicLink);
+    topics.appendChild(topic);
 }
 
 function redirectToPage(page) {

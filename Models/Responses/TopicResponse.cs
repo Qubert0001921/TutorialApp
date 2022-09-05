@@ -5,5 +5,5 @@ public class TopicResponse
     public string Title { get; set; }
     public string ShortDescription { get; set; }
     public DateTime LastModifiedDate { get; set; }
-    public Guid TutorialId { get; set; }
+    public Guid SectionId { get; set; }
 }
