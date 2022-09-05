@@ -9,4 +9,5 @@ public class TutorialResponse
     public bool IsPublic { get; set; }
     public string ImagePath { get; set; }
     public string AccountEmail { get; set; }
+    public List<SectionResponse> SectionResponses { get; set; }
 }

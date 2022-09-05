@@ -3,44 +3,81 @@
 <html>
     <head>
         <title>@ViewData["Title"] | @ViewData["AppName"]</title>
-        <script defer src="~/lib/btstrap/js/bootstrap.min.js"></script>
-        <script defer src="~/lib/jquery/jquery-3.6.0.min.js"></script>
-        <script defer src="~/js/script.js"></script>
-        <link rel="stylesheet" type="text/css" href="~/css/style.css" />
-        <link rel="stylesheet" type="text/css" href="~/lib/btstrap/css/bootstrap.min.css" />
+        <partial name="Partials/_ScriptsPartial" />
+        <partial name="Partials/_LinksPartial" />
     </head>
     <body>
-        <div class="border-bottom p-3">
-            <div class="menu-optionsgroup-left">
-                <div class="menu-option" style="font-size: 20px;">
+        @*<div class="border-bottom p-3">
+            <div class="row">
+                <div class="" style="font-size: 20px;">
                     <i>@ViewData["AppName"]</i>
                 </div>
-                    <a class="menu-option" href="/">Home</a>
-                    @if(User.Identity.IsAuthenticated)
-                    {
-                        <a class="menu-option" asp-controller="Tutorials" asp-action="Index">My Tutorials</a>
-                    }
-            </div>
 
-            <div class="menu-optionsgroup-right">
-                @if(User.Identity.IsAuthenticated)
-                {
-                    <div class="menu-option">
-                        @if (User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email) is not null) 
-                        {
-                            <a asp-controller="Auth" asp-action="Logout">Logout</a>
-                            <a class="btn btn-outline-primary" asp-controller="Auth" asp-action="AccountSettings">@User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value</a>
-                        }
+                <div class="menu-options">
+                    <div class="row">
+                        <div class="col-12 col-sm-6" style="text-align: left;">
+                            <a class="menu-option" href="/">Home</a>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                    <a class="" asp-controller="Tutorials" asp-action="Index">My Tutorials</a>
+                            }
+                        </div>
+                        <div class="col-12 col-sm-6" style="text-align: right;">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                    <div class="col">
+                                    @if (User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email) is not null)
+                                    {
+                                        <a asp-controller="Auth" asp-action="Logout">Logout</a>
+                                        <a class="btn btn-outline-primary" asp-controller="Auth" asp-action="AccountSettings">@User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value</a>
+                                    }
+                                    </div>
+                            }
+                            else
+                            {
+                                    <a class="" asp-controller="Auth" asp-action="Register">Register</a>
+                                    <a class="" asp-controller="Auth" asp-action="SignIn">Sign In</a>
+                            }
+                        </div>
                     </div>
-                }
-                else
-                {
-                    <a class="menu-option" asp-controller="Auth" asp-action="Register">Register</a>
-                    <a class="menu-option" asp-controller="Auth" asp-action="SignIn">Sign In</a>
-                }
+                </div>
             </div>
-            <div style="clear: both;"></div>
-        </div>
+        </div>*@
+
+        <nav class="navbar navbar-expand-md bg-light navbar-light border-bottom">
+            <div class="container-fluid">
+                <a href="/" class="navbar-brand">@ViewData["AppName"]</a>
+                
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#main-menu" aria-controls="main-menu" aria-expanded="false">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div id="main-menu" class="collapse navbar-collapse">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                        @if(User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item"><a asp-controller="Tutorials" asp-action="Index" class="nav-link">My Tutorials</a></li>
+                        }
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if(User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Auth" asp-action="LogOut">Logout</a></li>
+                            <li class="nav-item">
+                                <a class="nav-link border-bottom" asp-controller="Auth" asp-action="AccountSettings">@User.FindFirstValue(ClaimTypes.Email)</a>
+                            </li>
+                        }
+                        else 
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Auth" asp-action="Register">Register</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Auth" asp-action="SignIn">Sing In</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
         <div class="container">
             @RenderBody()
         </div>

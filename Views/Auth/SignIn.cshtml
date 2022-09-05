@@ -3,9 +3,12 @@
 
 <div class="w-50 mx-auto">
     <div class="text-center mt-3">
-        <img src="~/img/account.svg" alt="account-image" width="20%" height="20%"/>
+        <img src="~/img/account.svg" alt="account-image" width="10%" height="10%"/>
+        <h2>Documentario</h2>
+        <p>Sign In and start creating creative courses and documents!</p>
+        <hr />
     </div>
-    <form method="post" asp-controller="Auth" asp-action="SignIn">
+    <form method="post" action="/Auth/SignIn?RedirectUrl=@ViewData["RedirectUrl"]"  >
         <div class="form-group mt-3">
             <div class="row">
                 <div class="col-2">

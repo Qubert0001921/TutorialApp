@@ -7,10 +7,12 @@ namespace EmptyTest.Controllers;
 public class HomeController : Controller
 {
     private readonly ITutorialService _tutorialService;
+    private readonly Serilog.ILogger _logger;
 
-    public HomeController(ITutorialService tutorialService)
+    public HomeController(ITutorialService tutorialService, Serilog.ILogger logger)
     {
         _tutorialService = tutorialService;
+        _logger = logger;
     }
 
     public async Task<IActionResult> Index([FromQuery] GetTutorialsQuery query)

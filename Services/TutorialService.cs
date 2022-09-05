@@ -4,7 +4,6 @@ using EmptyTest.Helpers;
 using EmptyTest.Models.Requests.MyTutorials;
 using EmptyTest.Models.Responses;
 using EmptyTest.Repositories;
-using EmptyTest.ViewModels;
 
 namespace EmptyTest.Services;
 public interface ITutorialService
@@ -12,7 +11,7 @@ public interface ITutorialService
 	Task<ServiceResult> CreateTutorialAsync(CreateTutorialRequest requestModel);
 	Task<IEnumerable<TutorialResponse>> GetPublicTutorialsAsync();
 	Task<IEnumerable<TutorialResponse>> GetAccountTutorialsAsync();
-	Task<(ServiceResult, TutorialByIdViewModel?)> GetTutorialById(Guid tutorialId);
+	Task<TutorialResponse?> GetTutorialById(Guid tutorialId);
 }
 
 public class TutorialService : ITutorialService
@@ -21,13 +20,16 @@ public class TutorialService : ITutorialService
 	private readonly IUserContextService _userContextService;
 	private readonly IMapper _mapper;
 	private readonly IWebHostEnvironment _environment;
+	private readonly ISectionRepository _sectionRepository;
 
-	public TutorialService(ITutorialRepository tutorialRepository, IUserContextService userContextService, IMapper mapper, IWebHostEnvironment environment)
+	public TutorialService(ITutorialRepository tutorialRepository, IUserContextService userContextService, IMapper mapper, IWebHostEnvironment environment,
+		ISectionRepository sectionRepository)
 	{
 		_tutorialRepository = tutorialRepository;
 		_userContextService = userContextService;
 		_mapper = mapper;
 		_environment = environment;
+		_sectionRepository = sectionRepository;
 	}
 
 	public async Task<ServiceResult> CreateTutorialAsync(CreateTutorialRequest requestModel)
@@ -80,23 +82,26 @@ public class TutorialService : ITutorialService
 		return models;
 	}
 
-	public async Task<(ServiceResult, TutorialByIdViewModel?)> GetTutorialById(Guid tutorialId)
+	public async Task<TutorialResponse?> GetTutorialById(Guid tutorialId)
 	{
-		var tutorial = await _tutorialRepository.FindByIdWithValues(tutorialId);
+		var tutorial = await _tutorialRepository.FindByIdAsync(tutorialId);
 		if (tutorial is null)
 		{
-			return (ServiceResult.ValidationError, null);
+			return null;
 		}
 
+		var sections = await _sectionRepository.FindSectionsByTutorialIdWithValuesAsync(tutorialId);
+
 		var tutorialModel = _mapper.Map<TutorialResponse>(tutorial);
-		var sectionModels = _mapper.Map<List<SectionResponse>>(tutorial.Sections);
+		var sectionModels = _mapper.Map<List<SectionResponse>>(sections);
 
-		var viewModel = new TutorialByIdViewModel
+		for (int i = 0; i < sectionModels.Count(); i++)
 		{
-			Tutorial = tutorialModel,
-			Sections = sectionModels
-		};
+			sectionModels[i].TopicsResponses = _mapper.Map<List<TopicResponse>>(sections.ElementAt(i).Topics);
+		}
 
-		return (ServiceResult.Success, viewModel);
+		tutorialModel.SectionResponses = sectionModels;
+
+		return tutorialModel;
 	}
 }

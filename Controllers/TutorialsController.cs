@@ -24,8 +24,8 @@ public class TutorialsController : Controller
     [AllowAnonymous]
     public async Task<IActionResult> GetTutorialById([FromRoute] Guid id)
     {
-        var (result, viewModel) = await _tutorialService.GetTutorialById(id);
-        if (result == ServiceResult.ValidationError)
+        var tutorial = await _tutorialService.GetTutorialById(id);
+        if (tutorial is null)
         {
             return Redirect(Routes.HomePage);
         }
@@ -34,11 +34,12 @@ public class TutorialsController : Controller
 
         var accountIdClaim = _userContextService.AccountId;
         Guid.TryParse(accountIdClaim?.Value, out Guid accountId);
-        if (accountId == viewModel?.Tutorial.AccountId)
+        if (accountId == tutorial?.AccountId)
         {
             ViewData["IsAuthor"] = true;
         }
-        return View("TutorialById", viewModel);
+
+        return View("TutorialById", tutorial);
     }
 
     [HttpGet]

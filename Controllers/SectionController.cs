@@ -2,12 +2,14 @@
 using EmptyTest.Models.Requests.MyTutorials;
 using EmptyTest.Services;
 using EmptyTest.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmptyTest.Controllers;
 
 [Controller]
 [Route("Tutorials/{tutorialId:guid}/[controller]")]
+[Authorize]
 public class SectionController : Controller
 {
     private readonly ITutorialService _tutorialService;
@@ -22,16 +24,16 @@ public class SectionController : Controller
     [HttpGet]
     public async Task<IActionResult> AddSectionPage([FromRoute] Guid tutorialId)
     {
-        var (result, tutorialViewModel) = await _tutorialService.GetTutorialById(tutorialId);
-        switch (result)
+        var tutorial = await _tutorialService.GetTutorialById(tutorialId);
+        if (tutorial is null)
         {
-            case ServiceResult.ValidationError:
-                return Redirect(Routes.TutorialsPage);
+            return Redirect(Routes.TutorialsPage);
         }
 
         var model = new AddSectonViewModel
         {
-            Tutorial = tutorialViewModel.Tutorial,
+            TutorialName = tutorial.Name,
+            TutorialId = tutorial.Id,
             AddSectionRequest = new AddSectionRequest()
         };
 
@@ -41,13 +43,15 @@ public class SectionController : Controller
     [HttpPost]
     public async Task<IActionResult> AddSectionForm(AddSectonViewModel viewModel, [FromRoute] Guid tutorialId)
     {
-        var (result, tutorial) = await _tutorialService.GetTutorialById(tutorialId);
-        if (result == ServiceResult.ValidationError)
+        var tutorial = await _tutorialService.GetTutorialById(tutorialId);
+        if (tutorial is null)
         {
             ViewData["ValidationError"] = "Tutorial doesn't exist!";
             return View(viewModel);
         }
-        viewModel.Tutorial = tutorial.Tutorial;
+
+        viewModel.TutorialId = tutorial.Id;
+        viewModel.TutorialName = tutorial.Name;
 
         var addingResult = await _sectionService.CreateSection(tutorialId, viewModel.AddSectionRequest);
         if (addingResult == ServiceResult.ValidationError)

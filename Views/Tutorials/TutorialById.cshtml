@@ -1,17 +1,18 @@
-﻿@using EmptyTest.ViewModels
+﻿@using EmptyTest.Models.Responses
+@using EmptyTest.ViewModels
 @{
     ViewData["Title"] = "Tutotrial";
 }
-@model TutorialByIdViewModel
+@model TutorialResponse
 
 <div class="row mt-3">
     <div class="col-12 col-md-6 col-lg-4 mt-3">
         <div class="card">
-            <img class="card-img-top img-fluid" src="@Model.Tutorial.ImagePath" />
+            <img class="card-img-top img-fluid" src="@Model.ImagePath" />
             <div class="card-body">
                 <div class="row">
                     <div class="col-3">
-                        <h3>@Model.Tutorial.Price zł</h3>
+                        <h3>@Model.Price zł</h3>
                     </div>
                     <div class="col-9">
                         <button class="btn btn-primary w-100">Buy</button>
@@ -21,52 +22,55 @@
         </div>
     </div>
     <div class="col-12 col-md-6 col-lg-8 mt-3">
-        <h1>@Model.Tutorial.Name</h1>
-        <p>@Model.Tutorial.Description</p>
-        <p>Created by <a href="#">@Model.Tutorial.AccountEmail</a></p>
+        <h1>@Model.Name</h1>
+        <p>@Model.Description</p>
+        <p>Created by <a href="#">@Model.AccountEmail</a></p>
 
         @if (ViewData["IsAuthor"] is true)
         {
-                <a href="/Tutorials/@Model.Tutorial.Id/Section">add section</a>
+            <a href="/Tutorials/@Model.Id/Section">add section</a>
         }
 
         <div class="container-fluid px-0">
-            @if(Model.Sections.Any()) 
+            @if(Model.SectionResponses.Any()) 
             {
                 <div class="sections">
-                    @foreach (var sec in Model.Sections)
+                    @foreach (var sec in Model.SectionResponses)
                     {
                         <div class="section p-1 mt-1">
-                            <div class="row">
+                            <div class="row section-header">
                                 <div class="col-10">
-                                    <h4>@sec.Name</h4>
+                                    <h4 class="text-darkgray">@sec.Name</h4>
                                 </div>
                                 <div class="col-2" style="text-align: right;">
-                                    <label class="btn-section-expand">Expand</label>
+                                    <label class="btn-section-expand"><i class="icon-down-dir"></i></label>
                                 </div>
                             </div>
-                            <div class="topics" style="display: none;">
-                                <label>@sec.ShortDescription</label>
-                                <hr />
+                            <div class="section-details" style="display: none;">
+                                <label class="d-block">@sec.ShortDescription</label>
                                 @if (ViewData["IsAuthor"] is true)
                                 {
-                                    <a href="/Tutorials/@Model.Tutorial.Id/Section/@sec.Id/Topics">Add topic</a>
+                                     <a
+                                        onclick="setTopicSectionIdAndTutorialId('@sec.Id', '@Model.Id', this)" 
+                                        data-bs-toggle="modal" data-bs-target="#add-topic-modal" href="#">
+                                        + Add topic
+                                     </a>
                                 }
-                                @if(sec.Topics.Any())
-                                {
-                                        <ul>
-                                            @foreach (var topic in sec.Topics)
-                                            {
-                                                <li>@topic.Title</li>   
-                                            }
-                                        </ul>
-                                }
-                                else 
-                                {
-                                    <div class="text-center">
-                                        No Topics
-                                    </div>
-                                }
+                                <hr />
+                                <ul style="display: @(sec.TopicsResponses.Any() ? "block" : "none")" class="topics">
+                                    @foreach (var topic in sec.TopicsResponses)
+                                    {
+                                        <li>
+                                            <a class="@(User.Identity.IsAuthenticated ? "" : "disabled")" 
+                                                href="@(User.Identity.IsAuthenticated ? $"/Tutorials/{Model.Id}/Section/{sec.Id}/Topics/{topic.Id}" : "#")">
+                                                @topic.Title
+                                            </a>
+                                        </li>   
+                                    }
+                                </ul>
+                                <div class="text-center no-topics" style="display: @(sec.TopicsResponses.Any() ? "none" : "block")" >
+                                    No Topics
+                                </div>
                             </div>
                         </div>
                     }
@@ -76,6 +80,51 @@
             {
                 <p class="text-center">No Sections</p>
             }
+        </div>
+    </div>
+</div>
+
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-topic-modal">Launch</button>
+
+<div id="add-topic-modal" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Topic</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Message Box Close Button"></button>
+            </div>
+            <form id="add-topic-form" action="bon voyage przyjacielu">
+                <div class="modal-content p-3">
+                    <div class="row">
+                        <div class="form-group mt-3">
+                            <div class="row">
+                                <div class="col-3">
+                                    <label class="form-label" for="Title">Title</label>
+                                </div>
+                                <div class="col-9">
+                                    <input id="Title" name="Title" class="form-control" for="Title" autocomplete="off" />
+                                </div>
+                                <span class="text-danger" id="add-topic-title-error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group mt-3">
+                            <div class="row">
+                                <div class="col-3">
+                                    <label class="form-label" for="ShortDescription">Description</label>
+                                </div>
+                                <div class="col-9">
+                                    <input id="ShortDescription" name="ShortDescription" class="form-control" for="ShortDescription" autocomplete="off" />
+                                </div>
+                                <span class="text-danger" id="add-topic-description-error"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
+                    <button class="btn btn-primary" type="submit">Send</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

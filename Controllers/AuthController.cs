@@ -1,5 +1,6 @@
 ﻿using EmptyTest.Helpers;
 using EmptyTest.Models.Requests.Auth;
+using EmptyTest.Models.Requests.Queries;
 using EmptyTest.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -14,25 +15,26 @@ public class AuthController : Controller
         _authService = authService;
     }
 
-    public IActionResult SignIn()
+    public IActionResult SignIn([FromQuery] SingInQuery query)
     {
+        ViewData["RedirectUrl"] = query.RedirectUrl;
         return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> SignIn(SignInRequest requestModel)
+    public async Task<IActionResult> SignIn(SignInRequest requestModel, [FromQuery] SingInQuery query)
     {
         if (!ModelState.IsValid) return View();
 
-        var (result, principal) = await _authService.SignIn(requestModel);
-        if (result == Helpers.ServiceResult.ValidationError)
+        var principal = await _authService.SignIn(requestModel);
+        if (principal is null)
         {
             ViewData["SignInError"] = "Invalid email or password";
         }
-        else if (result == Helpers.ServiceResult.Success && principal is not null)
+        else
         {
             await this.HttpContext.SignInAsync(principal);
-            return Redirect(Routes.HomePage);
+            return Redirect(query.RedirectUrl ?? Routes.HomePage);
         }
         return View();
     }

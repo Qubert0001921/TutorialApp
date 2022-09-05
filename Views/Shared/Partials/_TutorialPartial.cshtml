@@ -1,0 +1,18 @@
+﻿@using EmptyTest.Models.Responses
+@model TutorialResponse
+
+<tr onclick="redirectToPage('Tutorials/@Model.Id')">
+    <td>@Model.Name</td>
+    <td>@Model.Description</td>
+    <td>@Model.Price</td>
+    <td>
+        @if (Model.IsPublic)
+        {
+            <label>Public</label>
+        }
+        else
+        {
+            <label>Private</label>
+        }
+    </td>
+</tr>

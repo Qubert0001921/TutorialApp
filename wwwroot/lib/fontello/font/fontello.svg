@@ -1,0 +1,22 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2022 by original authors @ fontello.com</metadata>
+<defs>
+<font id="fontello" horiz-adv-x="1000" >
+<font-face font-family="fontello" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="down-circle" unicode="&#xe800;" d="M1000 349q0-136-67-251t-182-182-251-67-251 67-182 182-67 251 67 251 182 182 251 67 251-67 182-182 67-251z m-500-186l232 233-71 71-161-161-161 161-71-71z" horiz-adv-x="1000" />
+
+<glyph glyph-name="down-dir" unicode="&#xe801;" d="M540 587l-269-473-271 473 540 0z" horiz-adv-x="540" />
+
+<glyph glyph-name="up-dir" unicode="&#xe802;" d="M0 114l269 473 271-473-540 0z" horiz-adv-x="540" />
+
+<glyph glyph-name="up-circle" unicode="&#xe803;" d="M1000 349q0-136-67-251t-182-182-251-67-251 67-182 182-67 251 67 251 182 182 251 67 251-67 182-182 67-251z m-339-118l71 71-232 233-232-233 71-71 161 161z" horiz-adv-x="1000" />
+
+<glyph glyph-name="up-open" unicode="&#xe804;" d="M0 174l352 352 148 148 148-148 352-352-148-148-352 351-352-351z" horiz-adv-x="1000" />
+
+<glyph glyph-name="down-open" unicode="&#xe805;" d="M0 526l148 148 352-351 352 351 148-148-352-352-148-148-148 148z" horiz-adv-x="1000" />
+</font>
+</defs>
+</svg>

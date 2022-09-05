@@ -9,7 +9,7 @@ using System.Security.Claims;
 namespace EmptyTest.Services;
 public interface IAuthService
 {
-    Task<(ServiceResult, ClaimsPrincipal?)> SignIn(SignInRequest requestModel);
+    Task<ClaimsPrincipal?> SignIn(SignInRequest requestModel);
     Task<ServiceResult> RegisterAccount(RegisterAccountRequest requestModel);
 }
 
@@ -44,18 +44,18 @@ public class AuthService : IAuthService
         return ServiceResult.Created;
     }
 
-    public async Task<(ServiceResult, ClaimsPrincipal?)> SignIn(SignInRequest requestModel)
+    public async Task<ClaimsPrincipal?> SignIn(SignInRequest requestModel)
     {
         var account = await _accountRepository.FindByEmailAsync(requestModel.Email);
         if (account is null)
         {
-            return (ServiceResult.ValidationError, null);
+            return null;
         }
 
         var result = _passwordHasher.VerifyHashedPassword(account, account.PasswordHash, requestModel.Password);
         if (result != PasswordVerificationResult.Success)
         {
-            return (ServiceResult.ValidationError, null);
+            return null;
         }
 
         var claims = new List<Claim>()
@@ -66,6 +66,6 @@ public class AuthService : IAuthService
 
         var identity = new ClaimsIdentity(claims, "Cookie");
         var principal = new ClaimsPrincipal(identity);
-        return (ServiceResult.Success, principal);
+        return principal;
     }
 }

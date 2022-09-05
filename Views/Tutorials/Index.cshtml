@@ -34,21 +34,7 @@
     <tbody>
         @foreach(var tutorial in Model)
         {
-            <tr onclick="redirectToPage('Tutorials/@tutorial.Id')">
-                <td>@tutorial.Name</td>
-                <td>@tutorial.Description</td>
-                <td>@tutorial.Price</td>
-                <td>
-                    @if(tutorial.IsPublic)
-                    {
-                        <label>Public</label>
-                    }
-                    else 
-                    {
-                        <label>Private</label>
-                    }
-                </td>
-            </tr>
+            <partial model="tutorial" name="Partials/_TutorialPartial" />
         }
     </tbody>
 </table>

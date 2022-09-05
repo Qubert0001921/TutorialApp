@@ -1,1 +1,48 @@
-﻿<h1>HELLOWEOWEIOWI</h1>
+﻿@using EmptyTest.Models.Requests.MyTutorials
+@model AddTopicRequest
+
+<div class="container-fluid">
+    <div class="row mt-3">
+        <div class="col-5">
+            <div class="breadcrumb">
+                <a class="breadcrumb-item" asp-controller="Tutorials" asp-action="Index">My Tutorials</a>
+                <a class="breadcrumb-item" asp-controller="Tutorials" asp-action=""></a>
+                <label class="breadcrumb-item">Create Tutorial</label>
+            </div>
+        </div>
+
+        <div class="col-7">
+            <h4>Create Tutorial</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto">
+            <form>
+                <div class="form-group mt-3">
+                    <div class="row">
+                        <div class="col-3 col-sm-2">
+                            <label class="form-label">Name</label>
+                        </div>
+                        <div class="col-9 col-md-10">
+                            <input class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mt-3">
+                    <div class="row">
+                        <div class="col-3 col-sm-2">
+                            <label class="form-label">Description</label>
+                        </div>
+                        <div class="col-9 col-md-10">
+                            <input class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mt-3" style="text-align: right;">
+                    <button class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

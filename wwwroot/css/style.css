@@ -1,6 +1,5 @@
 ﻿.menu-option {
-    display: inline-block;
-    margin: 5px;
+    display: block;
 }
 
 .menu-optionsgroup-left {
@@ -40,7 +39,44 @@ a.button-link {
     border-radius: 3px;
 }
 
-.section:hover {
+.section-header:hover {
     cursor: pointer;
+}
+
+.section:hover {
     border: 1px solid lightblue;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.text-darkgray {
+    color: rgb(53, 53, 53)
+}
+
+.disabled {
+    color: #585858;
+    text-decoration: none;
+}
+
+.disabled:hover {
+    cursor: default;
+    color: #585858;
+}
+
+.btn-add-topic {
+    background-color:aqua;
+    border-radius: 3px;
+    padding: 2px 4px 2px 4px;
+    border: 1px solid blue;
+    color: darkgray;
+    text-decoration: none;
+}
+
+.btn-add-topic:hover {
+    cursor: pointer;
 }
