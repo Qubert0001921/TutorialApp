@@ -5,6 +5,10 @@
 }
 @model TutorialResponse
 
+@section TutorialByIdScript {
+    <script defer src="~/js/tutorialById.js"></script>
+}
+
 <div class="row mt-3">
     <div class="col-12 col-md-6 col-lg-4 mt-3">
         <div class="card">
@@ -83,8 +87,6 @@
         </div>
     </div>
 </div>
-
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-topic-modal">Launch</button>
 
 <div id="add-topic-modal" class="modal fade" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

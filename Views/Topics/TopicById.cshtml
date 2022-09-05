@@ -1,1 +1,36 @@
-﻿<h1>It works!!!</h1>
+﻿@using EmptyTest.ViewModels
+@model TopicViewModel
+
+<div class="breadcrumb">
+    <span class="breadcrumb-item"><a href="/Tutorials">Tutorial Name</a></span>
+    <span class="breadcrumb-item"><a href="/Tutorials">Section Name</a></span>
+    <span class="breadcrumb-item"><a href="/Tutorials">Topic</a></span>
+</div>
+
+<div class="row h-100">
+    <div class="col-3">
+        <div class="section h-100">
+            <div class="section-header">
+                <h3>@Model.CurrentSection.Name</h3>
+            </div>
+
+            <p>@Model.CurrentSection.ShortDescription</p>
+
+            <ul class="topics">
+                @foreach (var topic in Model.CurrentSection.TopicsResponses)
+                {
+                    <li>
+                        <a href=@($"/Tutorials/{Model.CurrentSection.TutorialId}/Section/{Model.CurrentSection.Id}/Topics/{topic.Id}")>
+                        @topic.Title
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="col-9">
+        <h1 class="d-inline-block">@Model.CurrentTopic.Title</h1>
+        <i>@Model.CurrentTopic.LastModifiedDate.ToString("yyyy-MM-dd")</i>
+        <p class="d-block">@Model.CurrentTopic.ShortDescription</p>
+    </div>
+</div>

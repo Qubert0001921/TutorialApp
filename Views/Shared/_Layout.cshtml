@@ -3,48 +3,12 @@
 <html>
     <head>
         <title>@ViewData["Title"] | @ViewData["AppName"]</title>
+        @await RenderSectionAsync("TutorialByIdScript", false)
         <partial name="Partials/_ScriptsPartial" />
         <partial name="Partials/_LinksPartial" />
     </head>
     <body>
-        @*<div class="border-bottom p-3">
-            <div class="row">
-                <div class="" style="font-size: 20px;">
-                    <i>@ViewData["AppName"]</i>
-                </div>
-
-                <div class="menu-options">
-                    <div class="row">
-                        <div class="col-12 col-sm-6" style="text-align: left;">
-                            <a class="menu-option" href="/">Home</a>
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                    <a class="" asp-controller="Tutorials" asp-action="Index">My Tutorials</a>
-                            }
-                        </div>
-                        <div class="col-12 col-sm-6" style="text-align: right;">
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                    <div class="col">
-                                    @if (User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email) is not null)
-                                    {
-                                        <a asp-controller="Auth" asp-action="Logout">Logout</a>
-                                        <a class="btn btn-outline-primary" asp-controller="Auth" asp-action="AccountSettings">@User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value</a>
-                                    }
-                                    </div>
-                            }
-                            else
-                            {
-                                    <a class="" asp-controller="Auth" asp-action="Register">Register</a>
-                                    <a class="" asp-controller="Auth" asp-action="SignIn">Sign In</a>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>*@
-
-        <nav class="navbar navbar-expand-md bg-light navbar-light border-bottom">
+        <nav class="navbar navbar-expand-md bg-light navbar-light border-bottom navigation">
             <div class="container-fluid">
                 <a href="/" class="navbar-brand">@ViewData["AppName"]</a>
                 
@@ -78,7 +42,7 @@
             </div>
         </nav>
 
-        <div class="container">
+        <div class="container main-container">
             @RenderBody()
         </div>
     </body>

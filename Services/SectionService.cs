@@ -1,13 +1,16 @@
 ﻿using AutoMapper;
 using EmptyTest.Entities;
+using EmptyTest.Exceptions;
 using EmptyTest.Helpers;
 using EmptyTest.Models.Requests.MyTutorials;
+using EmptyTest.Models.Responses;
 using EmptyTest.Repositories;
 
 namespace EmptyTest.Services;
 public interface ISectionService
 {
     Task<ServiceResult> CreateSection(Guid tutorialId, AddSectionRequest requestModel);
+    Task<SectionResponse> GetSectionById(Guid sectionId);
 }
 
 public class SectionService : ISectionService
@@ -34,5 +37,20 @@ public class SectionService : ISectionService
         await _sectionRepository.CreateAsync(section);
 
         return ServiceResult.Success;
+    }
+
+    public async Task<SectionResponse> GetSectionById(Guid sectionId)
+    {
+        var section = await _sectionRepository.FindByIdWithValuesAsync(sectionId);
+        if (section is null)
+        {
+            throw new NotFoundException("Section not found");
+        }
+
+        var topicResponses = _mapper.Map<List<TopicResponse>>(section.Topics);
+        var model = _mapper.Map<SectionResponse>(section);
+
+        model.TopicsResponses = topicResponses;
+        return model;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using EmptyTest.Exceptions;
 using EmptyTest.Models.Requests.MyTutorials;
 using EmptyTest.Services;
+using EmptyTest.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,10 +12,12 @@ namespace EmptyTest.Controllers;
 public class TopicsController : Controller
 {
     private readonly ITopicService _topicService;
+    private readonly ISectionService _sectionService;
 
-    public TopicsController(ITopicService topicService)
+    public TopicsController(ITopicService topicService, ISectionService sectionService)
     {
         _topicService = topicService;
+        _sectionService = sectionService;
     }
 
     [HttpPost]
@@ -40,8 +43,29 @@ public class TopicsController : Controller
 
     [HttpGet]
     [Route("{topicId:guid}")]
-    public async Task<IActionResult> GetTopicById([FromRoute] Guid topicId)
+    public async Task<IActionResult> GetTopicById([FromRoute] Guid topicId, [FromRoute] Guid sectionId, [FromRoute] Guid tutorialId)
     {
-        return View("Views/Topics/TopicById.cshtml");
+        try
+        {
+            var section = await _sectionService.GetSectionById(sectionId);
+            var topic = section.TopicsResponses.FirstOrDefault(x => x.Id == topicId);
+
+            if (topic is null)
+            {
+                return Redirect($"/Tutorials/{tutorialId}");
+            }
+
+            TopicViewModel viewModel = new()
+            {
+                CurrentSection = section,
+                CurrentTopic = topic
+            };
+
+            return View("Views/Topics/TopicById.cshtml", viewModel);
+        }
+        catch (NotFoundException exception)
+        {
+            return Redirect($"/Tutorials/{tutorialId}");
+        }
     }
 }

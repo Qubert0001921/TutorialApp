@@ -2,6 +2,22 @@
     display: block;
 }
 
+.navigation {
+    min-height: 58px !important;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+.main-container {
+    height: calc(100% - 100px);
+}
+
 .menu-optionsgroup-left {
     text-align: left;
     float:left;
