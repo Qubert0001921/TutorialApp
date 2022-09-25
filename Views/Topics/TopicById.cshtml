@@ -2,14 +2,13 @@
 @model TopicViewModel
 
 <div class="breadcrumb">
-    <span class="breadcrumb-item"><a href="/Tutorials">Tutorial Name</a></span>
-    <span class="breadcrumb-item"><a href="/Tutorials">Section Name</a></span>
-    <span class="breadcrumb-item"><a href="/Tutorials">Topic</a></span>
+    <span class="breadcrumb-item"><a href="/Tutorials/@Model.CurrentSection.TutorialId">@Model.CurrentSection.TutorialTitle</a></span>
+    <span class="breadcrumb-item"><a>@Model.CurrentTopic.Title</a></span>
 </div>
 
 <div class="row h-100">
-    <div class="col-3">
-        <div class="section h-100">
+    <div class="col-12 col-sm-6 col-md-5 col-lg-4">
+        <div class="section p-2 mb-3">
             <div class="section-header">
                 <h3>@Model.CurrentSection.Name</h3>
             </div>
@@ -20,15 +19,22 @@
                 @foreach (var topic in Model.CurrentSection.TopicsResponses)
                 {
                     <li>
-                        <a href=@($"/Tutorials/{Model.CurrentSection.TutorialId}/Section/{Model.CurrentSection.Id}/Topics/{topic.Id}")>
-                        @topic.Title
-                        </a>
+                        @if (topic.Id == Model.CurrentTopic.Id)
+                        {
+                            <strong>@topic.Title</strong>
+                        }
+                        else
+                        {
+                            <a href=@($"/Tutorials/{Model.CurrentSection.TutorialId}/Section/{Model.CurrentSection.Id}/Topics/{topic.Id}")>
+                                @topic.Title
+                            </a>
+                        }
                     </li>
                 }
             </ul>
         </div>
     </div>
-    <div class="col-9">
+    <div class="col-12 col-sm-6 col-md-7 col-lg-8">
         <h1 class="d-inline-block">@Model.CurrentTopic.Title</h1>
         <i>@Model.CurrentTopic.LastModifiedDate.ToString("yyyy-MM-dd")</i>
         <p class="d-block">@Model.CurrentTopic.ShortDescription</p>

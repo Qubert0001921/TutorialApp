@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using EmptyTest.Entities;
-using EmptyTest.Helpers;
+using EmptyTest.Exceptions;
 using EmptyTest.Models.Requests.Auth;
 using EmptyTest.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -10,7 +10,7 @@ namespace EmptyTest.Services;
 public interface IAuthService
 {
     Task<ClaimsPrincipal?> SignIn(SignInRequest requestModel);
-    Task<ServiceResult> RegisterAccount(RegisterAccountRequest requestModel);
+    Task RegisterAccount(RegisterAccountRequest requestModel);
 }
 
 public class AuthService : IAuthService
@@ -28,12 +28,12 @@ public class AuthService : IAuthService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<ServiceResult> RegisterAccount(RegisterAccountRequest requestModel)
+    public async Task RegisterAccount(RegisterAccountRequest requestModel)
     {
         var existingAccount = await _accountRepository.FindByEmailAsync(requestModel.Email);
         if (existingAccount is not null)
         {
-            return ServiceResult.ValidationError;
+            throw new BadRequestException("Account at this email already exists");
         }
 
         var account = _mapper.Map<Account>(requestModel);
@@ -41,7 +41,6 @@ public class AuthService : IAuthService
         account.PasswordHash = hasherPassword;
 
         await _accountRepository.CreateAsync(account);
-        return ServiceResult.Created;
     }
 
     public async Task<ClaimsPrincipal?> SignIn(SignInRequest requestModel)

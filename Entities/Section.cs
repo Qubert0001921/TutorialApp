@@ -6,4 +6,5 @@ public class Section : GuidEntity
     public string ShortDescription { get; set; }
 
     public virtual List<Topic> Topics { get; set; }
+    public virtual Tutorial Tutorial { get; set; }
 }

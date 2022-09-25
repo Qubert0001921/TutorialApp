@@ -3,6 +3,7 @@ using System;
 using EmptyTest.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EmptyTest.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220925193846_AddedFilePathsToTopic")]
+    partial class AddedFilePathsToTopic
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,6 +74,7 @@ namespace EmptyTest.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("DocumentFilePath")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("LastModifiedDate")
@@ -89,6 +92,7 @@ namespace EmptyTest.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("VideFilePath")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");

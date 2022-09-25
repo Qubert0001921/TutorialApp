@@ -4,6 +4,8 @@ let addTopicElement = null;
 
 let addTopicTitleError = "";
 let addTopicDescriptionError = "";
+let addTopicVideoFileError = "";
+let addTopicDocumentFileError = "";
 
 function setTopicSectionIdAndTutorialId(sectionId, tutorialId, element) {
     addTopicSectionId = sectionId;
@@ -14,8 +16,12 @@ function setTopicSectionIdAndTutorialId(sectionId, tutorialId, element) {
 function clearAddTopicModal() {
     document.getElementById("add-topic-title-error").innerText = "";
     document.getElementById("add-topic-description-error").innerText = "";
+    document.getElementById("add-video-file-error").innerText = "";
+    document.getElementById("add-document-file-error").innerText = "";
     document.getElementById("Title").value = "";
     document.getElementById("ShortDescription").value = "";
+    document.getElementById("VideoFile").value = "";
+    document.getElementById("DocumentFile").value = "";
 }
 
 document.querySelector("#add-topic-form").addEventListener("submit", e => {
@@ -24,41 +30,64 @@ document.querySelector("#add-topic-form").addEventListener("submit", e => {
     const form = new FormData();
     const title = baseForm["Title"].value;
     const shortDescription = baseForm["ShortDescription"].value;
+    const videoFile = baseForm["VideFile"].files[0];
+    const documentFile = baseForm["DocumentFile"].files[0];
 
-    form.append("Title", title);
     form.append("ShortDescription", shortDescription);
+    form.append("Title", title);
+    form.append("VideoFile", videoFile);
+    form.append("DocumentFile", documentFile);
 
-    $.ajax({
-        type: "POST",
-        url: `/Tutorials/${addTopicTutorialId}/Section/${addTopicSectionId}/Topics`,
-        dataType: "json",
-        contentType: "application/x-www-form-urlencoded",
-        data: {
-            Title: title,
-            ShortDescription: shortDescription
+    console.log(videoFile)
+
+    //$.ajax({
+    //    type: "POST",
+    //    url: `/Tutorials/${addTopicTutorialId}/Section/${addTopicSectionId}/Topics`,
+    //    dataType: "json",
+    //    contentType: "multipart/form-data",
+    //    data: {
+    //        Title: title,
+    //        ShortDescription: shortDescription,
+    //        VideFile: videoFile,
+    //        DocumentFile: documentFile
+    //    },
+    //    statusCode: {
+    //        201: onAddTopicSuccess,
+    //        400: function (result) {
+    //            const jsonResult = JSON.parse(result.responseText);
+    //            let titleError = "";
+    //            let descriptionError = "";
+    //            let videoError = "";
+    //            let documentError = "";
+
+    //            console.log(jsonResult);
+
+    //            if (jsonResult.Title != null)
+    //                titleError = jsonResult.Title[0];
+    //            else titleError = "";
+
+    //            if (jsonResult.ShortDescription != null)
+    //                descriptionError = jsonResult.ShortDescription[0];
+    //            else descriptionError = "";
+
+    //            document.getElementById("add-topic-title-error").innerText = titleError;
+    //            document.getElementById("add-topic-description-error").innerText = descriptionError;
+    //        }
+    //    }
+    //})
+
+    fetch(`/Tutorials/${addTopicTutorialId}/Section/${addTopicSectionId}/Topics`, {
+        method: "POST",
+        headers: {
+            //"Content-Type": "multipart/form-data"
         },
-        statusCode: {
-            201: onAddTopicSuccess,
-            400: function (result) {
-                const jsonResult = JSON.parse(result.responseText);
-                let titleError = "";
-                let descriptionError = "";
-
-                console.log(jsonResult);
-
-                if (jsonResult.Title != null)
-                    titleError = jsonResult.Title[0];
-                else titleError = "";
-
-                if (jsonResult.ShortDescription != null)
-                    descriptionError = jsonResult.ShortDescription[0];
-                else descriptionError = "";
-
-                document.getElementById("add-topic-title-error").innerText = titleError;
-                document.getElementById("add-topic-description-error").innerText = descriptionError;
-            }
-        }
+        body: form,
     })
+        .then(res => {
+            if (res.status == 201)
+                res.json().then(data => onAddTopicSuccess(data))
+        })
+        .then(data => console.log(data))
 })
 
 function onAddTopicSuccess(data, textStatus) {

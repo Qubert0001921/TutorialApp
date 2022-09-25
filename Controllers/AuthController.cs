@@ -1,4 +1,5 @@
-﻿using EmptyTest.Helpers;
+﻿using EmptyTest.Exceptions;
+using EmptyTest.Helpers;
 using EmptyTest.Models.Requests.Auth;
 using EmptyTest.Models.Requests.Queries;
 using EmptyTest.Services;
@@ -33,7 +34,10 @@ public class AuthController : Controller
         }
         else
         {
-            await this.HttpContext.SignInAsync(principal);
+            await HttpContext.SignInAsync(AuthenticationSchemas.Default, principal, new AuthenticationProperties
+            {
+                IsPersistent = true
+            });
             return Redirect(query.RedirectUrl ?? Routes.HomePage);
         }
         return View();
@@ -49,15 +53,14 @@ public class AuthController : Controller
     {
         if (!ModelState.IsValid) return View();
 
-        var result = await _authService.RegisterAccount(requestModel);
-        switch (result)
+        try
         {
-            case Helpers.ServiceResult.ValidationError:
-                ViewData["RegisterError"] = "This email is already taken";
-                break;
-            case Helpers.ServiceResult.Created:
-                ViewData["RegisterSuccess"] = "Successfully created an account";
-                break;
+            await _authService.RegisterAccount(requestModel);
+            ViewData["RegisterSuccess"] = "Successfully created an account";
+        }
+        catch (BadRequestException ex)
+        {
+            ViewData["RegisterError"] = ex.Message;
         }
 
         return View();

@@ -9,6 +9,7 @@ public class SectionMappingProfile : Profile
 	public SectionMappingProfile()
 	{
 		CreateMap<AddSectionRequest, Section>();
-		CreateMap<Section, SectionResponse>();
+		CreateMap<Section, SectionResponse>()
+			.ForMember(x => x.TutorialTitle, x => x.MapFrom(xx => xx.Tutorial.Name));
 	}
 }

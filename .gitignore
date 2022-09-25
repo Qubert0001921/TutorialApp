@@ -1,2 +1,5 @@
 /bin
 /obj
+/wwwroot/usrdata/timgs/*
+/wwwroot/usrdata/vids/*
+/wwwroot/usrdata/docs/*

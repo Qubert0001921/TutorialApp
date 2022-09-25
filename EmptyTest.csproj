@@ -26,6 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\usrdata\docs\" />
+    <Folder Include="wwwroot\usrdata\vids\" />
     <Folder Include="wwwroot\usrdata\timgs\" />
   </ItemGroup>
 

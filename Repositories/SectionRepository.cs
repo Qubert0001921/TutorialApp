@@ -21,6 +21,7 @@ public class SectionRepository : BaseRepository<Section, Guid>, ISectionReposito
         return await _dbContext
             .Sections
             .Include(x => x.Topics)
+            .Include(x => x.Tutorial)
             .FirstOrDefaultAsync(x => x.Id == sectionId);
     }
 

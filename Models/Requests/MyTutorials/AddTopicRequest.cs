@@ -9,4 +9,6 @@ public class AddTopicRequest
     [MaxLength(100, ErrorMessage = "Description require max 100 letters long")]
     [Required(ErrorMessage = "Description is required")]
     public string ShortDescription { get; set; }
+    public IFormFile? VideoFile { get; set; }
+    public IFormFile? DocumentFile { get; set; }
 }

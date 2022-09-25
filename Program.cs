@@ -1,9 +1,11 @@
 using EmptyTest.AppSettings;
 using EmptyTest.Data;
 using EmptyTest.Entities;
+using EmptyTest.Helpers;
 using EmptyTest.Repositories;
 using EmptyTest.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -35,9 +37,15 @@ public class Program
             //opts.WriteTo.Seq(context.Configuration["Seq:Url"]);
         });
 
+        builder.Services.Configure<KestrelServerOptions>(options =>
+        {
+            options.Limits.MaxRequestBodySize = long.MaxValue;
+            options.Limits.MaxRequestBufferSize = int.MaxValue;
+        });
+
         builder.Services.AddTransient<AppNameEnricher>();
         builder.Services.AddControllersWithViews();
-        builder.Services.AddAuthentication("Cookie").AddCookie("Cookie", cfg =>
+        builder.Services.AddAuthentication(AuthenticationSchemas.Default).AddCookie(AuthenticationSchemas.Default, cfg =>
         {
             var authenticationSettings = new AuthenticationSettings();
             builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
@@ -66,6 +74,7 @@ public class Program
         builder.Services.AddScoped<ISectionService, SectionService>();
         builder.Services.AddScoped<ITopicRepository, TopicRepository>();
         builder.Services.AddScoped<ITopicService, TopicService>();
+        builder.Services.AddSingleton<IFileSaveSettingsService, FileSaveSettingsService>();
 
         try
         {
